@@ -2,8 +2,8 @@
 
 # This script install Odoo, Pycharm and the OCA addons we do not modify in /opt/
 
-ODOO_VERSION="11.0"
-ODOO_NAME="odoo11"
+ODOO_VERSION="10.0"
+ODOO_NAME="odoo10"
 ADDONS_PATH="addons"
 ODOO_SERVER_DIR="/opt/server/$ODOO_NAME"
 ODOO_ADDONS_DIR="$ODOO_SERVER_DIR/$ADDONS_PATH"

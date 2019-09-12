@@ -5,11 +5,10 @@
 # Run as sudo
 ###############################################################################
 
-# todo: ask the version
-ODOO_VERSION="11.0"
+ODOO_VERSION="10.0"
 SOURCE_PATH="source"
 ADDONS_PATH="addons"
-ODOO_NAME="odoo11"
+ODOO_NAME="odoo10"
 ODOO_SERVER_DIR="/opt/server/$ODOO_NAME"
 ODOO_SOURCE_DIR="$ODOO_SERVER_DIR/$SOURCE_PATH"
 ODOO_ADDONS_DIR="$ODOO_SERVER_DIR/$ADDONS_PATH"
@@ -42,7 +41,7 @@ sudo apt upgrade -y
 # Install Dependencies
 #------------------------------------------------------------------------------
 echo -e "\n---- Install dependencies ----"
-sudo apt install -y git python3 python3-pip postgresql wget nodejs npm myrepos
+sudo apt install -y git python python-pip postgresql wget nodejs npm myrepos
 sudo npm install -g less
 
 #------------------------------------------------------------------------------
@@ -63,7 +62,7 @@ sudo apt install -f
 #------------------------------------------------------------------------------
 # Install Odoo Dependencies
 #------------------------------------------------------------------------------
-sudo apt install -y python3-dev libxml2-dev libxslt1-dev libevent-dev libsasl2-dev libssl1.0-dev libldap2-dev libpq-dev libpng-dev libjpeg-dev
+sudo apt install -y python-dev libxml2-dev libxslt1-dev libevent-dev libsasl2-dev libssl1.0-dev libldap2-dev libpq-dev libpng-dev libjpeg-dev
 
 #------------------------------------------------------------------------------
 # Install Python Package

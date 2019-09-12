@@ -1,9 +1,9 @@
 #!/bin/bash
 
 #Odoo
-ODOO_VERSION="11.0"
+ODOO_VERSION="10.0"
 GITHUB_USERNAME="quentingigon"
-SERVER_NAME="odoo11"
+SERVER_NAME="odoo10"
 ODOO_SERVER_PATH="server/$SERVER_NAME"
 ODOO_DEV_HOME="$HOME/$ODOO_SERVER_PATH"
 CONF_FILE_NAME="odoo"
@@ -131,12 +131,12 @@ git remote add upstream https://github.com/CompassionCH/compassion-accounting.gi
 git clone git@github.com:$GITHUB_USERNAME/compassion-switzerland.git --depth 1 --branch ${ODOO_VERSION} "$ODOO_DEV_HOME/compassion-switzerland"
 cd "$ODOO_DEV_HOME/compassion-switzerland" || exit
 git remote add upstream https://github.com/CompassionCH/compassion-switzerland.git
-pip3 install --user -r requirements.txt
+pip install --user -r requirements.txt
 
 git clone git@github.com:$GITHUB_USERNAME/compassion-modules.git --depth 1 --branch ${ODOO_VERSION} "$ODOO_DEV_HOME/compassion-modules"
 cd "$ODOO_DEV_HOME/compassion-modules" || exit
 git remote add upstream https://github.com/CompassionCH/compassion-modules.git
-pip3 install --user -r requirements.txt
+pip install --user -r requirements.txt
 
 #------------------------------------------------------------------------------
 # Languages settings
