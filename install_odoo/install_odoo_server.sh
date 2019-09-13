@@ -90,8 +90,7 @@ mr update
 # Install Odoo Python Dependency
 #------------------------------------------------------------------------------
 echo -e "\n==== Install Odoo Requirements===="
-pip3 install -r ${ODOO_SOURCE_DIR}/requirements.txt --user
-
+pip install -r ${ODOO_SOURCE_DIR}/requirements.txt --user
 
 sudo groupadd odoo
 sudo chgrp -R odoo ${ODOO_SERVER_DIR}

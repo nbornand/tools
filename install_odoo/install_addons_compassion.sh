@@ -3,6 +3,7 @@
 # This script install Odoo, Pycharm and the OCA addons we do not modify in /opt/
 
 ODOO_VERSION="10.0"
+GITHUB_USERNAME="quentingigon"
 ODOO_NAME="odoo10"
 ADDONS_PATH="addons"
 ODOO_SERVER_DIR="/opt/server/$ODOO_NAME"
@@ -23,8 +24,7 @@ git remote add compassion https://github.com/CompassionCH/web
 git pull compassion
 git checkout 10.0-widget-collapse-html
 
-# Add paid-addons
-sudo mkdir ${ODOO_ADDONS_DIR}/paid_addons
-cd ${ODOO_ADDONS_DIR}/paid_addons || exit
-git clone git@github.com:CompassionCH/paid-addons.git
-
+# Add paid-addons - can't se SSH if we have not write access to the repo
+# A prompt will ask for github username and password
+cd ${ODOO_ADDONS_DIR}|| exit
+git clone https://github.com/CompassionCH/paid-addons.git

@@ -10,8 +10,9 @@ CONF_FILE_NAME="odoo"
 CONF_FILE_PATH="${ODOO_DEV_HOME}/${CONF_FILE_NAME}.conf"
 ADDONS_PATH="addons"
 SOURCE_PATH="source"
-PAID_ADDONS_DIR="/opt/${ODOO_SERVER_PATH}/${ADDONS_PATH}/paid_addons"
 SOURCE_DIR="/opt/${ODOO_SERVER_PATH}/${SOURCE_PATH}"
+ADDONS_DIR="/opt/${ODOO_SERVER_PATH}/${ADDONS_PATH}"
+PAID_ADDONS_DIR="${ADDONS_DIR}/paid_addons"
 
 #------------------------------------------------------------------------------
 # Configuration parameters
@@ -122,7 +123,7 @@ XMLRPC_PORT=8069
 # CompassionCH/paid-addons
 #------------------------------------------------------------------------------
 echo -e "\n---- Create addons directory ----"
-sudo su $USER -c "mkdir -p $ODOO_DEV_HOME"
+sudo su "$USER" -c "mkdir -p $ODOO_DEV_HOME"
 
 git clone git@github.com:$GITHUB_USERNAME/compassion-accounting.git --depth 1 --branch ${ODOO_VERSION} "$ODOO_DEV_HOME/compassion-accounting"
 cd "$ODOO_DEV_HOME/compassion-accounting" || exit
@@ -153,7 +154,7 @@ sudo dpkg-reconfigure locales
 echo -e "* Create server config file"
 
 # Get paths of OCA addons
-cd "/opt/server/odoo11/addons/oca_addons/" || exit
+cd "${ADDONS_DIR}/oca_addons/" || exit
 addons_path=$(for addon in * ; do
   realpath "$addon" | sed s/$/,/
 done)
