@@ -84,7 +84,8 @@ cp "mrconfig" "${ODOO_ADDONS_DIR}/oca_addons/.mrconfig"
 echo "${ODOO_ADDONS_DIR}/oca_addons/.mrconfig" >> ~/.mrtrust
 cd ${ODOO_ADDONS_DIR}/oca_addons || exit
 mr update
-
+# the following command executes pip install in all subfolders of oca_addons
+# find . -name 'requirements.txt' -exec pip install -r {} --user \;
 
 #------------------------------------------------------------------------------
 # Install Odoo Python Dependency
