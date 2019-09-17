@@ -45,7 +45,7 @@ WP_SFTP_USER=""
 # Non-sensitive parameters
 CONNECT_CLIENT="Compassion.CH"
 
-DATA_DIR="/home/erp-q/.local/share/Odoo"
+DATA_DIR="/home/${USER}/.local/share/Odoo"
 DB_HOST="False"
 DB_MAXCONN=64
 DB_NAME="devel"
@@ -275,4 +275,4 @@ sudo su root -c "printf '[queue_job] \n' >> ${CONF_FILE_PATH}"
 
 sudo usermod -a -G odoo "$USER"
 sudo chown "$USER" "${ODOO_DEV_HOME}/${CONF_FILE_NAME}.conf"
-sudo chmod 640 /${ODOO_DEV_HOME}/${CONF_FILE_NAME}.conf
+sudo chmod 755 /${ODOO_DEV_HOME}/${CONF_FILE_NAME}.conf
