@@ -12,7 +12,7 @@ ADDONS_PATH="addons"
 SOURCE_PATH="source"
 SOURCE_DIR="/opt/${ODOO_SERVER_PATH}/${SOURCE_PATH}"
 ADDONS_DIR="/opt/${ODOO_SERVER_PATH}/${ADDONS_PATH}"
-PAID_ADDONS_DIR="${ADDONS_DIR}/paid_addons"
+PAID_ADDONS_DIR="${ADDONS_DIR}/paid-addons"
 
 #------------------------------------------------------------------------------
 # Configuration parameters
@@ -156,7 +156,7 @@ echo -e "* Create server config file"
 # Get paths of OCA addons
 cd "${ADDONS_DIR}/oca_addons/" || exit
 addons_path=$(for addon in * ; do
-  realpath "$addon" | sed s/$/,/
+  realpath "$addon" | sed s/^/"\t"/ | sed s/$/,/
 done)
 
 sudo touch "${ODOO_DEV_HOME}"/${CONF_FILE_NAME}.conf
@@ -166,12 +166,12 @@ sudo su root -c "printf '[options] \n' >> ${CONF_FILE_PATH}"
 # Add all addons needed by Odoo (oca, paid, switzerland, modules, accounting)
 sudo su root -c "printf 'addons_path=' >> ${CONF_FILE_PATH}"
 sudo su root -c "printf '$addons_path \n' >> ${CONF_FILE_PATH}"
-sudo su root -c "printf '${ODOO_DEV_HOME}/compassion-accounting, \n' >> ${CONF_FILE_PATH}"
-sudo su root -c "printf '${ODOO_DEV_HOME}/compassion-switzerland, \n' >> ${CONF_FILE_PATH}"
-sudo su root -c "printf '${ODOO_DEV_HOME}/compassion-modules, \n' >> ${CONF_FILE_PATH}"
-sudo su root -c "printf '${PAID_ADDONS_DIR}, \n' >> ${CONF_FILE_PATH}"
-sudo su root -c "printf '${SOURCE_DIR}/addons, \n' >> ${CONF_FILE_PATH}"
-sudo su root -c "printf '${SOURCE_DIR}/odoo/addons \n\n' >> ${CONF_FILE_PATH}"
+sudo su root -c "printf '\t${ODOO_DEV_HOME}/compassion-accounting, \n' >> ${CONF_FILE_PATH}"
+sudo su root -c "printf '\t${ODOO_DEV_HOME}/compassion-switzerland, \n' >> ${CONF_FILE_PATH}"
+sudo su root -c "printf '\t${ODOO_DEV_HOME}/compassion-modules, \n' >> ${CONF_FILE_PATH}"
+sudo su root -c "printf '\t${PAID_ADDONS_DIR}, \n' >> ${CONF_FILE_PATH}"
+sudo su root -c "printf '\t${SOURCE_DIR}/addons, \n' >> ${CONF_FILE_PATH}"
+sudo su root -c "printf '\t${SOURCE_DIR}/odoo/addons \n\n' >> ${CONF_FILE_PATH}"
 
 #------------------------------------------------------------------------------
 # Parameters of configuration file, sorted by alphabetical order
@@ -275,4 +275,4 @@ sudo su root -c "printf '[queue_job] \n' >> ${CONF_FILE_PATH}"
 
 sudo usermod -a -G odoo "$USER"
 sudo chown "$USER" "${ODOO_DEV_HOME}/${CONF_FILE_NAME}.conf"
-sudo chmod 640 /etc/${CONF_FILE_NAME}.conf
+sudo chmod 640 /${ODOO_DEV_HOME}/${CONF_FILE_NAME}.conf
