@@ -1,17 +1,18 @@
 #!/bin/bash
 
 #Odoo
-ODOO_VERSION="11.0"
+ODOO_VERSION="10.0"
 GITHUB_USERNAME="quentingigon"
-SERVER_NAME="odoo11"
+SERVER_NAME="odoo10"
 ODOO_SERVER_PATH="server/$SERVER_NAME"
 ODOO_DEV_HOME="$HOME/$ODOO_SERVER_PATH"
 CONF_FILE_NAME="odoo"
 CONF_FILE_PATH="${ODOO_DEV_HOME}/${CONF_FILE_NAME}.conf"
 ADDONS_PATH="addons"
 SOURCE_PATH="source"
-PAID_ADDONS_DIR="/opt/${ODOO_SERVER_PATH}/${ADDONS_PATH}/paid_addons"
 SOURCE_DIR="/opt/${ODOO_SERVER_PATH}/${SOURCE_PATH}"
+ADDONS_DIR="/opt/${ODOO_SERVER_PATH}/${ADDONS_PATH}"
+PAID_ADDONS_DIR="${ADDONS_DIR}/paid-addons"
 
 #------------------------------------------------------------------------------
 # Configuration parameters
@@ -44,7 +45,7 @@ WP_SFTP_USER=""
 # Non-sensitive parameters
 CONNECT_CLIENT="Compassion.CH"
 
-DATA_DIR="/home/erp-q/.local/share/Odoo"
+DATA_DIR="/home/${USER}/.local/share/Odoo"
 DB_HOST="False"
 DB_MAXCONN=64
 DB_NAME="devel"
@@ -122,7 +123,7 @@ XMLRPC_PORT=8069
 # CompassionCH/paid-addons
 #------------------------------------------------------------------------------
 echo -e "\n---- Create addons directory ----"
-sudo su $USER -c "mkdir -p $ODOO_DEV_HOME"
+sudo su "$USER" -c "mkdir -p $ODOO_DEV_HOME"
 
 git clone git@github.com:$GITHUB_USERNAME/compassion-accounting.git --depth 1 --branch ${ODOO_VERSION} "$ODOO_DEV_HOME/compassion-accounting"
 cd "$ODOO_DEV_HOME/compassion-accounting" || exit
@@ -131,12 +132,12 @@ git remote add upstream https://github.com/CompassionCH/compassion-accounting.gi
 git clone git@github.com:$GITHUB_USERNAME/compassion-switzerland.git --depth 1 --branch ${ODOO_VERSION} "$ODOO_DEV_HOME/compassion-switzerland"
 cd "$ODOO_DEV_HOME/compassion-switzerland" || exit
 git remote add upstream https://github.com/CompassionCH/compassion-switzerland.git
-pip3 install --user -r requirements.txt
+pip install --user -r requirements.txt
 
 git clone git@github.com:$GITHUB_USERNAME/compassion-modules.git --depth 1 --branch ${ODOO_VERSION} "$ODOO_DEV_HOME/compassion-modules"
 cd "$ODOO_DEV_HOME/compassion-modules" || exit
 git remote add upstream https://github.com/CompassionCH/compassion-modules.git
-pip3 install --user -r requirements.txt
+pip install --user -r requirements.txt
 
 #------------------------------------------------------------------------------
 # Languages settings
@@ -153,9 +154,9 @@ sudo dpkg-reconfigure locales
 echo -e "* Create server config file"
 
 # Get paths of OCA addons
-cd "/opt/server/odoo11/addons/oca_addons/" || exit
+cd "${ADDONS_DIR}/oca_addons/" || exit
 addons_path=$(for addon in * ; do
-  realpath "$addon" | sed s/$/,/
+  realpath "$addon" | sed s/^/"\t"/ | sed s/$/,/
 done)
 
 sudo touch "${ODOO_DEV_HOME}"/${CONF_FILE_NAME}.conf
@@ -165,12 +166,12 @@ sudo su root -c "printf '[options] \n' >> ${CONF_FILE_PATH}"
 # Add all addons needed by Odoo (oca, paid, switzerland, modules, accounting)
 sudo su root -c "printf 'addons_path=' >> ${CONF_FILE_PATH}"
 sudo su root -c "printf '$addons_path \n' >> ${CONF_FILE_PATH}"
-sudo su root -c "printf '${ODOO_DEV_HOME}/compassion-accounting, \n' >> ${CONF_FILE_PATH}"
-sudo su root -c "printf '${ODOO_DEV_HOME}/compassion-switzerland, \n' >> ${CONF_FILE_PATH}"
-sudo su root -c "printf '${ODOO_DEV_HOME}/compassion-modules, \n' >> ${CONF_FILE_PATH}"
-sudo su root -c "printf '${PAID_ADDONS_DIR}, \n' >> ${CONF_FILE_PATH}"
-sudo su root -c "printf '${SOURCE_DIR}/addons, \n' >> ${CONF_FILE_PATH}"
-sudo su root -c "printf '${SOURCE_DIR}/odoo/addons \n\n' >> ${CONF_FILE_PATH}"
+sudo su root -c "printf '\t${ODOO_DEV_HOME}/compassion-accounting, \n' >> ${CONF_FILE_PATH}"
+sudo su root -c "printf '\t${ODOO_DEV_HOME}/compassion-switzerland, \n' >> ${CONF_FILE_PATH}"
+sudo su root -c "printf '\t${ODOO_DEV_HOME}/compassion-modules, \n' >> ${CONF_FILE_PATH}"
+sudo su root -c "printf '\t${PAID_ADDONS_DIR}, \n' >> ${CONF_FILE_PATH}"
+sudo su root -c "printf '\t${SOURCE_DIR}/addons, \n' >> ${CONF_FILE_PATH}"
+sudo su root -c "printf '\t${SOURCE_DIR}/odoo/addons \n\n' >> ${CONF_FILE_PATH}"
 
 #------------------------------------------------------------------------------
 # Parameters of configuration file, sorted by alphabetical order
@@ -274,4 +275,4 @@ sudo su root -c "printf '[queue_job] \n' >> ${CONF_FILE_PATH}"
 
 sudo usermod -a -G odoo "$USER"
 sudo chown "$USER" "${ODOO_DEV_HOME}/${CONF_FILE_NAME}.conf"
-sudo chmod 640 /etc/${CONF_FILE_NAME}.conf
+sudo chmod 755 /${ODOO_DEV_HOME}/${CONF_FILE_NAME}.conf
