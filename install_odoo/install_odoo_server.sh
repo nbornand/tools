@@ -2,17 +2,17 @@
 ###############################################################################
 # Script for installing Odoo on Ubuntu Server 18.04
 # Author: Eicher Stéphane
-# Run as sudo
+# No run as sudo
 ###############################################################################
 
 ODOO_VERSION="10.0"
 SOURCE_PATH="source"
 ADDONS_PATH="addons"
 ODOO_NAME="odoo10"
-ODOO_SERVER_DIR="/opt/server/$ODOO_NAME"
+ODOO_SERVER_DIR="/opt/odoo/$ODOO_NAME"
 ODOO_SOURCE_DIR="$ODOO_SERVER_DIR/$SOURCE_PATH"
 ODOO_ADDONS_DIR="$ODOO_SERVER_DIR/$ADDONS_PATH"
-ODOO_LOG_DIR="/var/log/$ODOO_NAME"
+ODOO_LOG_DIR="/var/log/odoo/$ODOO_NAME"
 
 
 #------------------------------------------------------------------------------
@@ -28,7 +28,7 @@ fi
 # Create folder structure for Odoo
 #------------------------------------------------------------------------------
 echo -e "\n---- Create Log directory ----"
-sudo mkdir ${ODOO_LOG_DIR}
+sudo mkdir -p ${ODOO_LOG_DIR}
 
 #------------------------------------------------------------------------------
 # Update Server
