@@ -35,8 +35,6 @@ checkout = git clone 'https://github.com/OCA/survey.git' -b 10.0
 checkout = git clone 'https://github.com/OCA/bank-payment.git' 'bank-payment' -b 10.0
 [website-cms]
 checkout = git clone https://github.com/OCA/website-cms -b 10.0
-[misc-addons]
-checkout = git clone https://github.com/it-projects-llc/misc-addons.git -b 10.0
 [mis-builder]
 checkout = git clone https://github.com/OCA/mis-builder.git -b 10.0
 [social]
@@ -50,9 +48,10 @@ checkout = git clone 'https://github.com/OCA/crm' 'crm' -b 10.0
 [l10n-switzerland]
 checkout = git clone 'https://github.com/OCA/l10n-switzerland' 'l10n-switzerland' -b 10.0
 [reporting-engine]
-checkout = git clone https://github.com/OCA/reporting-engine.git -b 10.0
+checkout = git clone https://github.com/OCA/reporting-engine.git 'reporting-engine' -b 10.0
 [web]
 checkout = git clone 'https://github.com/OCA/web.git' 'web' -b 10.0
+
 # Independant d'Odoo ------------------------------------------------------------------------------------------------
 [openupgradelib]
-checkout = git clone https://github.com/OCA/openupgradelib.git
+checkout = git clone https://github.com/OCA/openupgradelib.git 'openupgradelib'

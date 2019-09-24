@@ -1,30 +1,23 @@
 #!/bin/bash
 
-# This script install Odoo, Pycharm and the OCA addons we do not modify in /opt/
-
 ODOO_VERSION="10.0"
-GITHUB_USERNAME="quentingigon"
+GITHUB_USERNAME=""
 ODOO_NAME="odoo10"
 ADDONS_PATH="addons"
-ODOO_SERVER_DIR="/opt/server/$ODOO_NAME"
+ODOO_SERVER_DIR="/opt/odoo/$ODOO_NAME"
 ODOO_ADDONS_DIR="$ODOO_SERVER_DIR/$ADDONS_PATH"
 
-# Add Compassion modified addons in wait of upstream merge
-sudo mkdir ${ODOO_ADDONS_DIR}/hr
-cd ${ODOO_ADDONS_DIR}/hr || exit
-git init
-git remote add compassion https://github.com/CompassionCH/hr
-git pull compassion
-git checkout hr-extra-hours
-
-sudo mkdir ${ODOO_ADDONS_DIR}/web
-cd ${ODOO_ADDONS_DIR}/web || exit
-git init
-git remote add compassion https://github.com/CompassionCH/web
-git pull compassion
-git checkout 10.0-widget-collapse-html
+#------------------------------------------------------------------------------
+# Clone PERSO addons
+#------------------------------------------------------------------------------
+sudo mkdir -p ${ODOO_ADDONS_DIR}/oca_addons
+cp "perso_mrconfig" "${ODOO_ADDONS_DIR}/.mrconfig"
+echo "${ODOO_ADDONS_DIR}/.mrconfig" >> ~/.mrtrust
+cd ${ODOO_ADDONS_DIR} || exit
+mr update
+# the following command executes pip install in all subfolders of oca_addons
+# find . -name 'requirements.txt' -exec pip install -r {} --user \;
 
 # Add paid-addons - can't se SSH if we have not write access to the repo
 # A prompt will ask for github username and password
-cd ${ODOO_ADDONS_DIR}|| exit
 git clone https://github.com/CompassionCH/paid-addons.git

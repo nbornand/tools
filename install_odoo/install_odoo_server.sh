@@ -1,8 +1,8 @@
 #!/bin/bash
 ###############################################################################
-# Script for installing Odoo on Ubuntu Server 18.04
+# Script for installing Odoo on Ubuntu Server 18.04 / 19.04
 # Author: Eicher Stéphane
-# No run as sudo
+# Not run as sudo
 ###############################################################################
 
 ODOO_VERSION="10.0"
@@ -23,6 +23,12 @@ then
     echo "This version seems to be already installed"
     exit
 fi
+
+#------------------------------------------------------------------------------
+# Create group odoo
+#------------------------------------------------------------------------------
+getent group odoo || groupadd odoo
+sudo usermod -a -G odoo "$USER"
 
 #------------------------------------------------------------------------------
 # Create folder structure for Odoo
@@ -58,6 +64,7 @@ sudo apt install -y fontconfig fontconfig-config fonts-dejavu-core libfontconfig
 wget https://downloads.wkhtmltopdf.org/0.12/0.12.5/wkhtmltox_0.12.5-1.bionic_amd64.deb
 sudo dpkg -i wkhtmltox_0.12.5-1.bionic_amd64.deb
 sudo apt install -f
+rm wkhtmltox_0.12.5-1.bionic_amd64.deb
 
 #------------------------------------------------------------------------------
 # Install Odoo Dependencies
@@ -66,7 +73,7 @@ sudo apt install -y python-dev libxml2-dev libxslt1-dev libevent-dev libsasl2-de
 
 #------------------------------------------------------------------------------
 # Install Python Package
-#----------------------------------------------------------------------------d--
+#------------------------------------------------------------------------------
 echo -e "\n---- Install tool packages ----"
 sudo apt install -y git gdebi-core libpq-dev
 
@@ -80,12 +87,20 @@ sudo git clone --depth 1 --branch ${ODOO_VERSION} https://www.github.com/odoo/od
 # Clone OCA addons
 #------------------------------------------------------------------------------
 sudo mkdir -p ${ODOO_ADDONS_DIR}/oca_addons
-cp "mrconfig" "${ODOO_ADDONS_DIR}/oca_addons/.mrconfig"
+sudo cp "oca_mrconfig" "${ODOO_ADDONS_DIR}/oca_addons/.mrconfig"
 echo "${ODOO_ADDONS_DIR}/oca_addons/.mrconfig" >> ~/.mrtrust
 cd ${ODOO_ADDONS_DIR}/oca_addons || exit
-mr update
+sudo mr update
 # the following command executes pip install in all subfolders of oca_addons
 # find . -name 'requirements.txt' -exec pip install -r {} --user \;
+
+#------------------------------------------------------------------------------
+# Clone temp addons
+#------------------------------------------------------------------------------
+cp "perso_mrconfig" "${ODOO_ADDONS_DIR}/.mrconfig"
+echo "${ODOO_ADDONS_DIR}/.mrconfig" >> ~/.mrtrust
+cd ${ODOO_ADDONS_DIR} || exit
+mr update
 
 #------------------------------------------------------------------------------
 # Install Odoo Python Dependency
@@ -93,6 +108,8 @@ mr update
 echo -e "\n==== Install Odoo Requirements===="
 pip install -r ${ODOO_SOURCE_DIR}/requirements.txt --user
 
-sudo groupadd odoo
+#------------------------------------------------------------------------------
+# Apply group and right on the folder
+#------------------------------------------------------------------------------
 sudo chgrp -R odoo ${ODOO_SERVER_DIR}
-
+sudo chmod g+w -R ${ODOO_SERVER_DIR}

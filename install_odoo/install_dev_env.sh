@@ -4,7 +4,7 @@
 ODOO_VERSION="10.0"
 GITHUB_USERNAME="quentingigon"
 SERVER_NAME="odoo10"
-ODOO_SERVER_PATH="server/$SERVER_NAME"
+ODOO_SERVER_PATH="odoo/$SERVER_NAME"
 ODOO_DEV_HOME="$HOME/$ODOO_SERVER_PATH"
 CONF_FILE_NAME="odoo"
 CONF_FILE_PATH="${ODOO_DEV_HOME}/${CONF_FILE_NAME}.conf"
@@ -236,27 +236,14 @@ sudo su root -c "printf 'reportgz = ${REPORTGZ}\n' >> ${CONF_FILE_PATH}"
 
 sudo su root -c "printf 'sendgrid_api_key = ${SENDGRID_API_KEY}\n' >> ${CONF_FILE_PATH}"
 sudo su root -c "printf 'sendgrid_test_address = ${SENDGRID_TEST_ADDRESS}\n' >> ${CONF_FILE_PATH}"
+
 sudo su root -c "printf 'server_wide_modules = ${SERVER_WIDE_MODULES}\n' >> ${CONF_FILE_PATH}"
+
 sudo su root -c "printf 'smb_ip = ${SMB_IP}\n' >> ${CONF_FILE_PATH}"
 sudo su root -c "printf 'smb_port = ${SMB_PORT}\n' >> ${CONF_FILE_PATH}"
 sudo su root -c "printf 'smb_pwd = ${SMB_PWD}\n' >> ${CONF_FILE_PATH}"
 sudo su root -c "printf 'smb_user = ${SMB_USER}\n' >> ${CONF_FILE_PATH}"
-sudo su root -c "printf 'smtp_password = ${SMTP_PASSWORD}\n' >> ${CONF_FILE_PATH}"
-sudo su root -c "printf 'smtp_port = ${SMTP_PORT}\n' >> ${CONF_FILE_PATH}"
-sudo su root -c "printf 'smtp_server = ${SMTP_SERVER}\n' >> ${CONF_FILE_PATH}"
-sudo su root -c "printf 'smtp_ssl = ${SMTP_SSL}\n' >> ${CONF_FILE_PATH}"
-sudo su root -c "printf 'smtp_user = ${SMTP_USER}\n' >> ${CONF_FILE_PATH}"
-sudo su root -c "printf 'syslog = ${SYSLOG}\n' >> ${CONF_FILE_PATH}"
 
-sudo su root -c "printf 'test_commit = ${TEST_COMMIT}\n' >> ${CONF_FILE_PATH}"
-sudo su root -c "printf 'test_enable = ${TEST_ENABLE}\n' >> ${CONF_FILE_PATH}"
-sudo su root -c "printf 'test_file = ${TEST_FILE}\n' >> ${CONF_FILE_PATH}"
-sudo su root -c "printf 'test_report_directory = ${TEST_REPORT_DIRECTORY}\n' >> ${CONF_FILE_PATH}"
-sudo su root -c "printf 'translate_modules = ${TRANSLATE_MODULES}\n' >> ${CONF_FILE_PATH}"
-
-sudo su root -c "printf 'unaccent = ${UNACCENT}\n' >> ${CONF_FILE_PATH}"
-
-sudo su root -c "printf 'without_demo = ${WITHOUT_DEMO}\n' >> ${CONF_FILE_PATH}"
 sudo su root -c "printf 'wordpress_host = ${WORDPRESS_HOST}\n' >> ${CONF_FILE_PATH}"
 sudo su root -c "printf 'wordpress_pwd = ${WORDPRESS_PWD}\n' >> ${CONF_FILE_PATH}"
 sudo su root -c "printf 'wordpress_user = ${WORDPRESS_USER}\n' >> ${CONF_FILE_PATH}"
