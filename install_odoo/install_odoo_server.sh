@@ -94,31 +94,13 @@ sudo mr update
 # the following command executes pip install in all subfolders of oca_addons
 find . -name 'requirements.txt' -exec pip install -r {} --user \;
 
-# Add custom remote for hr addon
-cd ${ODOO_ADDONS_DIR}/oca_addons/hr || exit
-sudo git remote add compassion https://github.com/CompassionCH/hr
-sudo git pull compassion
-sudo git checkout hr-extra-hours
-
-# Add custom remote for web addon
-cd ${ODOO_ADDONS_DIR}/oca_addons/web || exit
-sudo git remote add compassion https://github.com/CompassionCH/web
-sudo git pull compassion
-sudo git checkout 10.0-widget-collapse-html
-
-# Add custom remote for website addon
-cd ${ODOO_ADDONS_DIR}/oca_addons/website || exit
-sudo git remote add compassion https://github.com/CompassionCH/website
-sudo git pull compassion
-sudo git checkout 10.0
-
 #------------------------------------------------------------------------------
 # Clone temp addons
 #------------------------------------------------------------------------------
-cp "perso_mrconfig" "${ODOO_ADDONS_DIR}/.mrconfig"
+sudo cp "perso_mrconfig" "${ODOO_ADDONS_DIR}/.mrconfig"
 echo "${ODOO_ADDONS_DIR}/.mrconfig" >> ~/.mrtrust
 cd ${ODOO_ADDONS_DIR} || exit
-mr update
+sudo mr update
 
 #------------------------------------------------------------------------------
 # Install Odoo Python Dependency
