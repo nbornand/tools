@@ -27,7 +27,7 @@ fi
 #------------------------------------------------------------------------------
 # Create group odoo
 #------------------------------------------------------------------------------
-getent group odoo || groupadd odoo
+sudo getent group odoo || sudo groupadd odoo
 sudo usermod -a -G odoo "$USER"
 
 #------------------------------------------------------------------------------
@@ -69,7 +69,7 @@ rm wkhtmltox_0.12.5-1.bionic_amd64.deb
 #------------------------------------------------------------------------------
 # Install Odoo Dependencies
 #------------------------------------------------------------------------------
-sudo apt install -y python-dev libxml2-dev libxslt1-dev libevent-dev libsasl2-dev libssl1.0-dev libldap2-dev libpq-dev libpng-dev libjpeg-dev
+sudo apt install -y python-dev libxml2-dev libxslt1.1 libxslt1-dev libevent-dev libsasl2-dev libssl-dev libssl1.1 libldap2-dev libpq-dev libpng-dev libjpeg-dev python-ldap pyminizip firebase_admin
 
 #------------------------------------------------------------------------------
 # Install Python Package
@@ -92,7 +92,25 @@ echo "${ODOO_ADDONS_DIR}/oca_addons/.mrconfig" >> ~/.mrtrust
 cd ${ODOO_ADDONS_DIR}/oca_addons || exit
 sudo mr update
 # the following command executes pip install in all subfolders of oca_addons
-# find . -name 'requirements.txt' -exec pip install -r {} --user \;
+find . -name 'requirements.txt' -exec pip install -r {} --user \;
+
+# Add custom remote for hr addon
+cd ${ODOO_ADDONS_DIR}/oca_addons/hr || exit
+sudo git remote add compassion https://github.com/CompassionCH/hr
+sudo git pull compassion
+sudo git checkout hr-extra-hours
+
+# Add custom remote for web addon
+cd ${ODOO_ADDONS_DIR}/oca_addons/web || exit
+sudo git remote add compassion https://github.com/CompassionCH/web
+sudo git pull compassion
+sudo git checkout 10.0-widget-collapse-html
+
+# Add custom remote for website addon
+cd ${ODOO_ADDONS_DIR}/oca_addons/website || exit
+sudo git remote add compassion https://github.com/CompassionCH/website
+sudo git pull compassion
+sudo git checkout 10.0
 
 #------------------------------------------------------------------------------
 # Clone temp addons

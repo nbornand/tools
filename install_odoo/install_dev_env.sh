@@ -128,15 +128,18 @@ sudo su "$USER" -c "mkdir -p $ODOO_DEV_HOME"
 git clone https://github.com/$GITHUB_USERNAME/compassion-accounting.git --depth 1 --branch ${ODOO_VERSION} "$ODOO_DEV_HOME/compassion-accounting"
 cd "$ODOO_DEV_HOME/compassion-accounting" || exit
 git remote add upstream https://github.com/CompassionCH/compassion-accounting.git
+git pull upstream ${ODOO_VERSION}
 
 git clone https://github.com/$GITHUB_USERNAME/compassion-switzerland.git --depth 1 --branch ${ODOO_VERSION} "$ODOO_DEV_HOME/compassion-switzerland"
 cd "$ODOO_DEV_HOME/compassion-switzerland" || exit
 git remote add upstream https://github.com/CompassionCH/compassion-switzerland.git
+git pull upstream ${ODOO_VERSION}
 pip install --user -r requirements.txt
 
 git clone https://github.com/$GITHUB_USERNAME/compassion-modules.git --depth 1 --branch ${ODOO_VERSION} "$ODOO_DEV_HOME/compassion-modules"
 cd "$ODOO_DEV_HOME/compassion-modules" || exit
 git remote add upstream https://github.com/CompassionCH/compassion-modules.git
+git pull upstream ${ODOO_VERSION}
 pip install --user -r requirements.txt
 
 #------------------------------------------------------------------------------
