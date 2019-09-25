@@ -10,10 +10,10 @@ ODOO_VERSION="11.0"
 SOURCE_PATH="source"
 ADDONS_PATH="addons"
 ODOO_NAME="odoo11"
-ODOO_SERVER_DIR="/opt/server/$ODOO_NAME"
+ODOO_SERVER_DIR="/opt/odoo/$ODOO_NAME"
 ODOO_SOURCE_DIR="$ODOO_SERVER_DIR/$SOURCE_PATH"
 ODOO_ADDONS_DIR="$ODOO_SERVER_DIR/$ADDONS_PATH"
-ODOO_LOG_DIR="/var/log/$ODOO_NAME"
+ODOO_LOG_DIR="/var/log/odoo/$ODOO_NAME"
 
 
 #------------------------------------------------------------------------------
@@ -26,10 +26,17 @@ then
 fi
 
 #------------------------------------------------------------------------------
+# Create group odoo
+#------------------------------------------------------------------------------
+sudo getent group odoo || sudo groupadd odoo
+sudo usermod -a -G odoo "$USER"
+
+
+#------------------------------------------------------------------------------
 # Create folder structure for Odoo
 #------------------------------------------------------------------------------
 echo -e "\n---- Create Log directory ----"
-sudo mkdir ${ODOO_LOG_DIR}
+sudo mkdir -p ${ODOO_LOG_DIR}
 
 #------------------------------------------------------------------------------
 # Update Server
@@ -86,14 +93,14 @@ echo "${ODOO_ADDONS_DIR}/oca_addons/.mrconfig" >> ~/.mrtrust
 cd ${ODOO_ADDONS_DIR}/oca_addons || exit
 mr update
 
-
 #------------------------------------------------------------------------------
 # Install Odoo Python Dependency
 #------------------------------------------------------------------------------
 echo -e "\n==== Install Odoo Requirements===="
 pip3 install -r ${ODOO_SOURCE_DIR}/requirements.txt --user
 
-
-sudo groupadd odoo
+#------------------------------------------------------------------------------
+# Apply group and right on the folder
+#------------------------------------------------------------------------------
 sudo chgrp -R odoo ${ODOO_SERVER_DIR}
-
+sudo chmod g+w -R ${ODOO_SERVER_DIR}
