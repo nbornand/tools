@@ -66,6 +66,7 @@ sudo apt install -y fontconfig fontconfig-config fonts-dejavu-core libfontconfig
 wget https://downloads.wkhtmltopdf.org/0.12/0.12.5/wkhtmltox_0.12.5-1.bionic_amd64.deb
 sudo dpkg -i wkhtmltox_0.12.5-1.bionic_amd64.deb
 sudo apt install -f
+rm wkhtmltox_0.12.5-1.bionic_amd64.deb
 
 #------------------------------------------------------------------------------
 # Install Odoo Dependencies
