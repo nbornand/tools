@@ -21,7 +21,12 @@ ODOO_LOG_DIR="/var/log/odoo/$ODOO_NAME"
 if [[ -d ${ODOO_LOG_DIR} ]]
 then
     echo "This version seems to be already installed"
-    exit
+else
+    #------------------------------------------------------------------------------
+    # Create folder structure for Odoo
+    #------------------------------------------------------------------------------
+    echo -e "\n---- Create Log directory ----"
+    sudo mkdir -p ${ODOO_LOG_DIR}    
 fi
 
 #------------------------------------------------------------------------------
@@ -29,12 +34,6 @@ fi
 #------------------------------------------------------------------------------
 sudo getent group odoo || sudo groupadd odoo
 sudo usermod -a -G odoo "$USER"
-
-#------------------------------------------------------------------------------
-# Create folder structure for Odoo
-#------------------------------------------------------------------------------
-echo -e "\n---- Create Log directory ----"
-sudo mkdir -p ${ODOO_LOG_DIR}
 
 #------------------------------------------------------------------------------
 # Update Server
@@ -69,44 +68,58 @@ rm wkhtmltox_0.12.5-1.bionic_amd64.deb
 #------------------------------------------------------------------------------
 # Install Odoo Dependencies
 #------------------------------------------------------------------------------
-sudo apt install -y python-dev libxml2-dev libxslt1.1 libxslt1-dev libevent-dev libsasl2-dev libssl-dev libssl1.1 libldap2-dev libpq-dev libpng-dev libjpeg-dev python-ldap pyminizip firebase_admin
+sudo apt install -y python-dev libxml2-dev libxslt1.1 libxslt1-dev libevent-dev libsasl2-dev libssl-dev libssl1.1 libldap2-dev libpq-dev libpng-dev libjpeg-dev python-ldap || exit
 
 #------------------------------------------------------------------------------
 # Install Python Package
 #------------------------------------------------------------------------------
 echo -e "\n---- Install tool packages ----"
-sudo apt install -y git gdebi-core libpq-dev
+sudo apt install -y git gdebi-core libpq-dev || exit
 
 #------------------------------------------------------------------------------
 # Get repo Odoo
 #------------------------------------------------------------------------------
-echo -e "\n==== Get Odoo repo ===="
-sudo git clone --depth 1 --branch ${ODOO_VERSION} https://www.github.com/odoo/odoo ${ODOO_SOURCE_DIR}
+if [[ ! -d ${ODOO_SOURCE_DIR} ]]
+then
+    echo -e "\n==== Get Odoo repo ===="
+    sudo git clone --depth 1 --branch ${ODOO_VERSION} https://www.github.com/odoo/odoo ${ODOO_SOURCE_DIR}
+else
+    echo -e "\n==== Skip cloning Odoo repo ===="
+fi
 
 #------------------------------------------------------------------------------
 # Clone OCA addons
 #------------------------------------------------------------------------------
-sudo mkdir -p ${ODOO_ADDONS_DIR}/oca_addons
-sudo cp "oca_mrconfig" "${ODOO_ADDONS_DIR}/oca_addons/.mrconfig"
-echo "${ODOO_ADDONS_DIR}/oca_addons/.mrconfig" >> ~/.mrtrust
-cd ${ODOO_ADDONS_DIR}/oca_addons || exit
-sudo mr update
-# the following command executes pip install in all subfolders of oca_addons
-find . -name 'requirements.txt' -exec pip install -r {} --user \;
+if [[ ! -d ${ODOO_ADDONS_DIR} ]]
+then
+    sudo mkdir -p ${ODOO_ADDONS_DIR}/oca_addons
+    sudo cp "oca_mrconfig" "${ODOO_ADDONS_DIR}/oca_addons/.mrconfig"
+    echo "${ODOO_ADDONS_DIR}/oca_addons/.mrconfig" >> ~/.mrtrust
+    cd ${ODOO_ADDONS_DIR}/oca_addons || exit
+    sudo mr update
+
+    #------------------------------------------------------------------------------
+    # Clone temp addons
+    #------------------------------------------------------------------------------
+    sudo cp "perso_mrconfig" "${ODOO_ADDONS_DIR}/.mrconfig"
+    echo "${ODOO_ADDONS_DIR}/.mrconfig" >> ~/.mrtrust
+    cd ${ODOO_ADDONS_DIR} || exit
+    sudo mr update
+else
+    echo -e "\n==== Skip cloning OCA addons repo ===="
+fi
 
 #------------------------------------------------------------------------------
-# Clone temp addons
-#------------------------------------------------------------------------------
-sudo cp "perso_mrconfig" "${ODOO_ADDONS_DIR}/.mrconfig"
-echo "${ODOO_ADDONS_DIR}/.mrconfig" >> ~/.mrtrust
-cd ${ODOO_ADDONS_DIR} || exit
-sudo mr update
-
-#------------------------------------------------------------------------------
-# Install Odoo Python Dependency
+# Install Odoo Python Dependency and the for OCA addons
 #------------------------------------------------------------------------------
 echo -e "\n==== Install Odoo Requirements===="
+cd ${ODOO_ADDONS_DIR} || exit
 pip install -r ${ODOO_SOURCE_DIR}/requirements.txt --user
+echo -e "\n==== Install OCA addons Requirements===="
+cd ${ODOO_ADDONS_DIR}/oca_addons || exit
+# the following command executes pip install in all subfolders of oca_addons
+find . -name 'requirements.txt' -exec pip install -r {} --user \;
+pip install pyminizip firebase_admin || exit
 
 #------------------------------------------------------------------------------
 # Apply group and right on the folder

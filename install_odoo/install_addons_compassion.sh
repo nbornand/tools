@@ -1,7 +1,9 @@
 #!/bin/bash
 
+echo 'Please enter you git username:'
+read GITHUB_USERNAME
+
 ODOO_VERSION="10.0"
-GITHUB_USERNAME=""
 ODOO_NAME="odoo10"
 ADDONS_PATH="addons"
 ODOO_SERVER_DIR="/opt/odoo/$ODOO_NAME"
