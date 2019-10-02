@@ -49,9 +49,18 @@ checkout = git clone 'https://github.com/OCA/crm' 'crm' -b 10.0
 checkout = git clone 'https://github.com/OCA/l10n-switzerland' 'l10n-switzerland' -b 10.0
 [reporting-engine]
 checkout = git clone https://github.com/OCA/reporting-engine.git 'reporting-engine' -b 10.0
-[web]
-checkout = git clone 'https://github.com/OCA/web.git' 'web' -b 10.0
 
 # Independant d'Odoo ------------------------------------------------------------------------------------------------
 [openupgradelib]
 checkout = git clone https://github.com/OCA/openupgradelib.git 'openupgradelib'
+
+
+# Perso modules ---------------------------------------------------------------------------------------
+[hr]
+checkout = git clone 'https://github.com/CompassionCH/hr.git' 'hr' -b hr-extra-hours
+[web]
+checkout = git clone 'https://github.com/CompassionCH/web.git' 'web' -b 10.0-widget-collapse-html
+[website]
+checkout = git clone 'https://github.com/CompassionCH/website.git' 'website' -b 10.0
+[misc-addons]
+checkout = git clone https://github.com/it-projects-llc/misc-addons.git -b 10.0

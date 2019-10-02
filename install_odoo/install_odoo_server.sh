@@ -97,14 +97,6 @@ then
     echo "${ODOO_ADDONS_DIR}/oca_addons/.mrconfig" >> ~/.mrtrust
     cd ${ODOO_ADDONS_DIR}/oca_addons || exit
     sudo mr update
-
-    #------------------------------------------------------------------------------
-    # Clone temp addons
-    #------------------------------------------------------------------------------
-    sudo cp "perso_mrconfig" "${ODOO_ADDONS_DIR}/.mrconfig"
-    echo "${ODOO_ADDONS_DIR}/.mrconfig" >> ~/.mrtrust
-    cd ${ODOO_ADDONS_DIR} || exit
-    sudo mr update
 else
     echo -e "\n==== Skip cloning OCA addons repo ===="
 fi

@@ -15,7 +15,6 @@ ADDONS_PATH="addons"
 SOURCE_PATH="source"
 SOURCE_DIR="/opt/${ODOO_SERVER_PATH}/${SOURCE_PATH}"
 ADDONS_DIR="/opt/${ODOO_SERVER_PATH}/${ADDONS_PATH}"
-PAID_ADDONS_DIR="${ADDONS_DIR}/paid-addons"
 SCRIPT_DIR=$PWD
 
 #------------------------------------------------------------------------------
@@ -42,6 +41,10 @@ git remote add upstream https://github.com/CompassionCH/compassion-modules.git
 git pull upstream ${ODOO_VERSION}
 pip install --user -r requirements.txt
 
+git clone https://github.com/CompassionCH/paid-addons.git --branch ${ODOO_VERSION} "$ODOO_DEV_HOME/paid-addons"
+cd "$ODOO_DEV_HOME/paid-addons" || exit
+
+
 #------------------------------------------------------------------------------
 # Languages settings
 #------------------------------------------------------------------------------
@@ -62,7 +65,12 @@ addons_path=$(for addon in * ; do
   realpath "$addon" | sed s/^/"\t"/ | sed s/$/,/
 done)
 
+sudo chmod a+w "/opt/${ODOO_SERVER_PATH}"
 sudo touch "${ODOO_DEV_HOME}"/${CONF_FILE_NAME}.conf
+sudo usermod -a -G odoo "$USER"
+sudo chown "$USER" "${ODOO_DEV_HOME}/${CONF_FILE_NAME}.conf"
+sudo chmod a+w /${ODOO_DEV_HOME}/${CONF_FILE_NAME}.conf
+
 echo -e "* Creating server config file"
 sudo su root -c "printf '[options] \n' >> ${CONF_FILE_PATH}"
 
@@ -72,13 +80,10 @@ sudo su root -c "printf '$addons_path \n' >> ${CONF_FILE_PATH}"
 sudo su root -c "printf '\t${ODOO_DEV_HOME}/compassion-accounting, \n' >> ${CONF_FILE_PATH}"
 sudo su root -c "printf '\t${ODOO_DEV_HOME}/compassion-switzerland, \n' >> ${CONF_FILE_PATH}"
 sudo su root -c "printf '\t${ODOO_DEV_HOME}/compassion-modules, \n' >> ${CONF_FILE_PATH}"
-sudo su root -c "printf '\t${PAID_ADDONS_DIR}, \n' >> ${CONF_FILE_PATH}"
+sudo su root -c "printf '\t${ODOO_DEV_HOME}/paid-addons, \n' >> ${CONF_FILE_PATH}"
 sudo su root -c "printf '\t${SOURCE_DIR}/addons, \n' >> ${CONF_FILE_PATH}"
 sudo su root -c "printf '\t${SOURCE_DIR}/odoo/addons \n\n' >> ${CONF_FILE_PATH}"
 
 # Append config from the template with the username replaced.
 cat ${SCRIPT_DIR}/${CONF_FILE_NAME}.conf.tmpl | sed "s/{user}/$USER/g" >> ${CONF_FILE_PATH}
 
-sudo usermod -a -G odoo "$USER"
-sudo chown "$USER" "${ODOO_DEV_HOME}/${CONF_FILE_NAME}.conf"
-sudo chmod 755 /${ODOO_DEV_HOME}/${CONF_FILE_NAME}.conf
