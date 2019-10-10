@@ -44,6 +44,12 @@ pip install --user -r requirements.txt
 git clone https://github.com/CompassionCH/paid-addons.git --branch ${ODOO_VERSION} "$ODOO_DEV_HOME/paid-addons"
 cd "$ODOO_DEV_HOME/paid-addons" || exit
 
+#------------------------------------------------------------------------------
+# Create git hooks from maintainer-quality-tools
+#------------------------------------------------------------------------------
+ln -sf ${ADDONS_DIR}/maintainer-quality-tools/git/* "$ODOO_DEV_HOME/compassion-accounting/.git/hooks/."
+ln -sf ${ADDONS_DIR}/maintainer-quality-tools/git/* "$ODOO_DEV_HOME/compassion-switzerland/.git/hooks/."
+ln -sf ${ADDONS_DIR}/maintainer-quality-tools/git/* "$ODOO_DEV_HOME/compassion-modules/.git/hooks/."
 
 #------------------------------------------------------------------------------
 # Languages settings

@@ -37,6 +37,8 @@ checkout = git clone 'https://github.com/OCA/bank-payment.git' 'bank-payment' -b
 checkout = git clone https://github.com/OCA/website-cms -b 10.0
 [mis-builder]
 checkout = git clone https://github.com/OCA/mis-builder.git -b 10.0
+[maintainer-quality-tools]
+checkout = git clone https://github.com/OCA/maintainer-quality-tools.git -b 10.0
 [social]
 checkout = git clone 'https://github.com/OCA/social' 'social' -b 10.0
 [bank-statement-import]
